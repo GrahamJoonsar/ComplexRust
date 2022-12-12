@@ -33,6 +33,12 @@ impl ops::Add for Complex {
     }
 }
 
+impl ops::AddAssign for Complex {
+    fn add_assign(&mut self, other: Self) {
+        *self = Self {a: self.a + other.a, b: self.b + other.b};
+    }
+}
+
 impl ops::Sub for Complex {
     type Output = Self;
 
@@ -41,11 +47,23 @@ impl ops::Sub for Complex {
     }
 }
 
+impl ops::SubAssign for Complex {
+    fn sub_assign(&mut self, other: Self) {
+        *self = Self {a: self.a - other.a, b: self.b - other.b};
+    }
+}
+
 impl ops::Mul for Complex {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
         Self {a: self.a*other.a - self.b*other.b, b: self.a*other.b + self.b*other.a}
+    }
+}
+
+impl ops::MulAssign for Complex {
+    fn mul_assign(&mut self, other: Self) {
+        *self = Self {a: self.a*other.a - self.b*other.b, b: self.a*other.b + self.b*other.a};
     }
 }
 
@@ -58,8 +76,16 @@ impl ops::Div for Complex {
     }
 }
 
-fn main() {
-    println!("{}", (Complex::new(1.0, 1.0) / Complex::new(0.0, 1.0)).to_string())
+impl ops::DivAssign for Complex {
+    fn div_assign(&mut self, other: Self) {
+        let denom = other.a*other.a + other.b * other.b;
+        *self = Self {a: (self.a*other.a + self.b*other.b)/(denom), b: (self.b*other.a - self.a*other.b)/denom};
+    }
+}
 
-    
+fn main() {
+    let mut c = Complex::new(20.0, 0.0);
+    c /= Complex::new(5.0, 0.0);
+
+    println!("{}", c.to_string());
 }
