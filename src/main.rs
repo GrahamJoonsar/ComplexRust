@@ -1,4 +1,5 @@
 use std::ops;
+use std::fmt;
 
 #[allow(dead_code)]
 struct Complex {
@@ -20,8 +21,12 @@ impl Complex {
         self.b.atan2(self.a)
     }
 
-    fn to_string(&self) -> String {
-        format!("{}{}{}{}", self.a, " + ", self.b, "i")
+    fn real(&self) -> f64 {
+        self.a
+    }
+
+    fn imag(&self) -> f64 {
+        self.b
     }
 }
 
@@ -83,9 +88,15 @@ impl ops::DivAssign for Complex {
     }
 }
 
+impl fmt::Display for Complex {
+    fn fmt (&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} + {}i", self.a, self.b)
+    }
+}
+
 fn main() {
     let mut c = Complex::new(20.0, 0.0);
     c /= Complex::new(5.0, 0.0);
 
-    println!("{}", c.to_string());
+    println!("{}", c);
 }
